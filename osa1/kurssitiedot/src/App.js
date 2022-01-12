@@ -8,8 +8,6 @@ return (
 )
 }
 
-const vittu = () => { return (<p>hello</p>) }
-
 
 
 const Content = (props) => {
