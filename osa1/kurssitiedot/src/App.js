@@ -8,6 +8,10 @@ return (
 )
 }
 
+const vittu = () => { return (<p>hello</p>) }
+
+
+
 const Content = (props) => {
   return (
     <div>
@@ -36,6 +40,7 @@ const Total = (props) => {
 }
 
 const App = () => {
+
   const course = {
     name: 'Half Stack application development',
     parts: [
@@ -52,6 +57,9 @@ const App = () => {
         exercises: 14
       }
     ]
+
+
+
   }
 
 
