@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Statistics = (props) => {
+const StatisticLine = (props) => {
   return (
     <div>
       <p>
@@ -10,7 +10,7 @@ const Statistics = (props) => {
   )
 }
 
-const Reviews = (props) => {
+const Statistic = (props) => {
   console.log(props.valueAll)
   if ( props.valueAll == 0) {
     return(
@@ -21,15 +21,26 @@ const Reviews = (props) => {
   }
   return (
     <div>
-  <Statistics text="good" amount={props.good} />
-  <Statistics text="neutral" amount={props.neutral} />
-  <Statistics text="bad" amount={props.bad} />
-  <Statistics text="all" amount={props.valueAll} />
-  <Statistics text="average" amount={props.average} />
-  <Statistics text="positive" amount={props.positive*100} />
+  <StatisticLine text="good" amount={props.good} />
+  <StatisticLine text="neutral" amount={props.neutral} />
+  <StatisticLine text="bad" amount={props.bad} />
+  <StatisticLine text="all" amount={props.valueAll} />
+  <StatisticLine text="average" amount={props.average} />
+  <StatisticLine text="positive" amount={props.positive*100} />
   </div>
   )
 
+}
+
+const Button = (props) => {
+  return (
+  <button onClick = {() => {
+    props.Setreview(props.review+1)
+    props.allSet(props.valueAll+1)
+  }}>
+  {props.text}
+  </button>
+  )
 }
 
 const App = () => {
@@ -44,28 +55,12 @@ const App = () => {
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={() => {
-        setGood(good+1)
-        setAll(all+1)
-       // Reviews({good : {good}, neutral : {neutral}, bad : {bad}, valueAll : {valueAll}, average : {average} , positive : {positive}})
-      }}>
-        good
-        </button>
-      <button onClick={() => {
-        setNeutral(neutral+1)
-        setAll(all+1)
-      }}>
-        neutral
-      </button>
-      <button onClick={() => {
-        setBad(bad+1)
-        setAll(all+1)
-      }}>
-        bad
-      </button>
+      <Button Setreview = {setGood} allSet = {setAll} review={good} valueAll={all} text = "good" />
+      <Button Setreview = {setNeutral} allSet = {setAll} review={neutral} valueAll={all} text = "neutral" />
+      <Button Setreview = {setBad} allSet = {setAll} review={bad} valueAll={all} text = "bad" />
 
       <h1>statistics</h1>
-     <Reviews good = {good} neutral = {neutral} bad = {bad} valueAll = {all} average = {average}  positive = {positive} />
+     <Statistic good = {good} neutral = {neutral} bad = {bad} valueAll = {all} average = {average}  positive = {positive} />
 
     </div>
 
