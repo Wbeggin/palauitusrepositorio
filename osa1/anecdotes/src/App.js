@@ -1,4 +1,6 @@
 import { useState } from 'react'
+const points = [0, 0, 0, 0, 0, 0, 0]
+const copy = [...points]
 
 const App = () => {
   const anecdotes = [
@@ -12,18 +14,30 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-
+  const [voteCount, setVote] = useState(0)
+  var max = Math.max.apply(null, copy)
   return (
     <div>
+      <h1> anecdote of the day </h1>
       {anecdotes[selected]}
-      <br></br>
-      <button onClick={() => setSelected((Math.floor(Math.random() * 7) + 1)-1)}>
+      <p>has {copy[voteCount]} votes </p> 
+      <button onClick={() => {
+        copy[voteCount] += 1
+      }}>
+        vote
+      </button>
+      <button onClick={() => {
+        const xd = (Math.floor(Math.random() * 7) + 1)-1;
+        setSelected(xd);
+        setVote(xd)
+        }}>
         Next anecdote
       </button>
+      <h1> anecdote with most votes</h1>
+        {anecdotes[copy.indexOf(max)]}
     </div>
   )
 }
-
 
 
 export default App
