@@ -67,12 +67,13 @@ const App = () => {
     }
   ]
 
-  return (
-    courses.map(course => 
+  return ( 
+    <div>
+    {courses.map(course => 
+      <li key ={course.id}>
       <Course course = {course} parts = {course.parts} />
-      )
-  )
-
-}
+      </li> )}
+  </div>
+  )}
 
 export default App
