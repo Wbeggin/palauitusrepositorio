@@ -4,6 +4,7 @@ const Course = ({ course, parts}) => {
         arr.push(element.exercises)
     });
     const total = arr.reduce( (s, p) => s + p , 0 )
+
     return(
         <div>
         <h1>{course.name}</h1>
