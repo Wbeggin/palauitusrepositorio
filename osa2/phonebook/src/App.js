@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Person from './components/Person'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -8,11 +9,22 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    const person = {
-      name: newName
-    }
-    setPersons(persons.concat(person))
-    setNewName('')
+    console.log(persons)
+    let exists = false;
+    persons.map(person => 
+      {if(person.name === newName) {
+        alert(newName + ' ' + 'is already added to the phonebook')
+        exists = true;
+      }});
+
+      if (!exists){
+        const person = {
+          name: newName
+        }
+          setPersons(persons.concat(person))
+          setNewName('')
+      }
+    
   }
 
   const handleNameChange = (event) => {   
@@ -26,7 +38,7 @@ const App = () => {
         <div>
           name: <input value = {newName} 
           onChange={handleNameChange} />
-        </div>
+        </div>  
         <div>
           <button type="submit">add</button>
         </div>
@@ -34,9 +46,7 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {persons.map(person => 
-         <li key={person.name}>
-            {person.name} 
-            </li> 
+        <Person key={person.name} person={person} /> 
           )}
       </ul>
     </div>
