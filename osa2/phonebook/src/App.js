@@ -1,13 +1,9 @@
 import { useState } from 'react'
 import Person from './components/Person'
+import Persons from './components/Persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', pnumber: '040-123456' },
-    { name: 'Ada Lovelace', pnumber: '39-44-5323523' },
-    { name: 'Dan Abramov', pnumber: '12-43-234345' },
-    { name: 'Mary Poppendieck', pnumber: '39-23-6423122' }
-  ]) 
+  const [persons, setPersons] = useState(Persons()) 
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
