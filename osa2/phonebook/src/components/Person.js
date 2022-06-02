@@ -4,7 +4,7 @@ const Person = ({ person, filter}) => {
     console.log(person, filter)
      if (filter === '') {
          return(
-        <li>{person.name + ' ' + person.pnumber}</li>
+        <li>{person.name + ' ' + person.number}</li>
          )
         }
 
@@ -15,7 +15,7 @@ const Person = ({ person, filter}) => {
              )
         }
     return(
-        <li>{person.name + ' ' + person.pnumber}</li>
+        <li>{person.name + ' ' + person.number}</li>
          )
     
   }
