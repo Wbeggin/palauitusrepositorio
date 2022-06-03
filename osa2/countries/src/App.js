@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Country from './components/Country'
+import Filter from './components/Filter'
 
 const App = () => {
 
   const [countries, setCountries] = useState([])
   const [newFilter, setNewFilter] = useState('')
+  const [fLength, setFlength] = useState([])
+  let filteredCountries = []
 
   useEffect(() => {   
     console.log('effect')    
@@ -16,11 +19,48 @@ const App = () => {
     })}, [])
 
      console.log('render', countries.length, 'notes'  )
-     console.log(countries.name)
+
 
   const handleFilterChange = (event) => {   
       setNewFilter(event.target.value)
+      filteredCountries = []
+      countries.forEach((e) => {
+
+        if (Filter(e.name.common, event.target.value)) 
+        {
+          filteredCountries.push(e)
+          console.log(e)
+        }
+
+      })
+
+      console.log('array length' , filteredCountries.length)
+      console.log("filtered", filteredCountries.length)
+      setFlength(filteredCountries)
+
     }
+
+
+    const renderElement = () => {
+      console.log('renderFilteredLength', fLength.length)
+      if (fLength.length <= 10 && fLength.length != 0) {
+        return (
+          fLength.map(country => 
+            <Country key={country.name.common} 
+            country={country} 
+            filter={newFilter} /> 
+              )
+        )
+          }
+
+        else if (fLength == 0) {
+          return ('')
+        }
+        
+        return ('Too many matches, specify another filter')
+
+      }
+    
 
   return (
     <div>      
@@ -32,9 +72,7 @@ const App = () => {
       </form>
 
       <ul>
-        {countries.map(country => 
-        <Country key={country.name} country={country} filter={newFilter}/> 
-          )}
+        {renderElement()}
       </ul>
 
     </div>
