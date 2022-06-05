@@ -41,10 +41,10 @@ const App = () => {
 
     }
 
-
     const renderElement = () => {
       console.log('renderFilteredLength', fLength.length)
-      if (fLength.length <= 10 && fLength.length != 0 && fLength.length != 1) {
+      if (fLength.length <= 10 && fLength.length != 0 && fLength.length != 1) 
+      {
         return (
           fLength.map(country => 
             <Country key={country.name.common} 
@@ -52,7 +52,8 @@ const App = () => {
             filter={newFilter} 
             bool ={false}
             /> 
-              )
+              ) 
+
         )
           }
 
@@ -66,8 +67,7 @@ const App = () => {
               ))
         }
         
-        return ('Too many matches, specify another filter')
-
+        return ("too many matches, specify a filter")
       }
     
 
@@ -88,5 +88,6 @@ const App = () => {
   )
 
 }
+
 
 export default App;

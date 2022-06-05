@@ -1,6 +1,7 @@
 import Filter from './Filter'
 import '../App.css';
 
+
 const Country = ({ country, filter, bool}) => {
     console.log(country, filter)
 
@@ -38,11 +39,15 @@ const Country = ({ country, filter, bool}) => {
     return (
     < div>
         <h1> {country.name.common}</h1>
+                <button
+        onClick={() => console.log('toimii')}>
+        show  
+        </button> 
         </div>
 
     )
-
-    
+        
   }
-  
+
+
   export default Country
