@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Country from './components/Country'
 import Filter from './components/Filter'
+import './App.css';
 
 const App = () => {
 
@@ -43,18 +44,26 @@ const App = () => {
 
     const renderElement = () => {
       console.log('renderFilteredLength', fLength.length)
-      if (fLength.length <= 10 && fLength.length != 0) {
+      if (fLength.length <= 10 && fLength.length != 0 && fLength.length != 1) {
         return (
           fLength.map(country => 
             <Country key={country.name.common} 
             country={country} 
-            filter={newFilter} /> 
+            filter={newFilter} 
+            bool ={false}
+            /> 
               )
         )
           }
 
-        else if (fLength == 0) {
-          return ('')
+        if (fLength.length == 1) {
+          return (fLength.map(country => 
+            <Country key={country.name.common} 
+            country={country} 
+            filter={newFilter} 
+            bool ={true}
+            /> 
+              ))
         }
         
         return ('Too many matches, specify another filter')

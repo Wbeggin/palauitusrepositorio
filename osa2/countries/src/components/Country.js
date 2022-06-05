@@ -1,16 +1,17 @@
 import Filter from './Filter'
+import '../App.css';
 
-const Country = ({ country, filter}) => {
+const Country = ({ country, filter, bool}) => {
     console.log(country, filter)
-    console.log('typeof', typeof country.languages)
-    const xd = country.languages
-    console.log('lng', xd)
+
     if (!Filter(country.name.common, filter))
         {  
             return(
               ''
              )
         }
+
+    if (bool) {
     return(
         < div>
         <h1> {country.name.common}</h1>
@@ -18,9 +19,29 @@ const Country = ({ country, filter}) => {
         <p>area {country.area}</p>
 
         <h2>languages</h2>
-        {country.map((country) => console.log(country.language))}
+        {
+            Object.keys(country.languages).map((i) => (
+                <li> 
+                    {country.languages[i]}
+                </li>
+            )
+        )}
+        <div className='flag'> 
+            {
+            country.flag
+            }
+        </div>           
          </div>
          )
+        }
+    
+    return (
+    < div>
+        <h1> {country.name.common}</h1>
+        </div>
+
+    )
+
     
   }
   
