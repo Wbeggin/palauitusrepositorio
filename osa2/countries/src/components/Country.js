@@ -1,18 +1,7 @@
-import Filter from './Filter'
-import '../App.css';
+const Country = (country) => {
 
-
-const Country = ({ country, filter, bool}) => {
-    console.log(country, filter)
-
-    if (!Filter(country.name.common, filter))
-        {  
-            return(
-              ''
-             )
-        }
-
-    if (bool) {
+    console.log(typeof country)
+    console.log(country)
     return(
         < div>
         <h1> {country.name.common}</h1>
@@ -34,20 +23,8 @@ const Country = ({ country, filter, bool}) => {
         </div>           
          </div>
          )
-        }
-    
-    return (
-    < div>
-        <h1> {country.name.common}</h1>
-                <button
-        onClick={() => console.log('toimii')}>
-        show  
-        </button> 
-        </div>
-
-    )
         
+    
   }
-
 
   export default Country
