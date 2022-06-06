@@ -34,7 +34,7 @@ return(
     {countries.length <= 10 && countries.length !== 1 && countries.map((country) => 
     <div key={country.name.common}>{country.name.common}<button onClick={() => show(country)}>show</button></div>)}
      {countries.length === 1 && Country(countries[0])}
-    {country.languages !== undefined && Country(country)}
+    {country.capital !== undefined && Country(country)}
   </div>
 )
 
