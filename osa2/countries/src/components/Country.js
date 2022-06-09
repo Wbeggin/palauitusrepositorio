@@ -20,7 +20,7 @@ const Country = (country) => {
             {
             country.flag
             }
-        </div>           
+        </div>     
          </div>
          )
         
