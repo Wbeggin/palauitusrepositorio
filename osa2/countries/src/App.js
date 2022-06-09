@@ -8,6 +8,8 @@ let newFilter = false
 let countriesCopy = []
 let newWeahter = false
 
+// make a .ENV file and put your api key there such as EACT_APP_API_KEY = API KEY
+
 const ShowCountries = ({filter}) => {
   const api_key = process.env.REACT_APP_API_KEY
   const [countries, setCountries] = useState([])
