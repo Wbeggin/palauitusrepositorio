@@ -20,13 +20,32 @@ const App = () => {
   const addName = (event) => {
     event.preventDefault()
     console.log(persons)
-    let isAdded = true
+    let isAdded = false
+
 
     persons.map(person => 
-      {person.name === newName ?
-        alert(newName + ' ' + 'is already added to the phonebook') 
-        : isAdded = false
+      {
+        if (person.name === newName) {
+          isAdded = true;
+        }
       })
+
+      if (isAdded) {
+        if (window.confirm(`${newName} is already added to the phonebook,  replace the old number with a new one?`))
+        {
+          const personId = persons.find(n => n.name === newName)
+          const person = {
+            name: newName,
+            number: newNumber
+          }
+          personService.update(personId.id, person)
+          .then(returnedPerson => {setPersons(persons.map(person => 
+            person.id !== personId.id ? person : returnedPerson)
+            )
+          setNewName('')
+          setNewNumber('')   
+        })}
+      }
       
       if (!isAdded) {
         const person = {
@@ -39,7 +58,6 @@ const App = () => {
         setNewNumber('')  
         })
       }
-        
   }
 
   const handleNameChange = (event) => {   
@@ -54,6 +72,21 @@ const handleFilterChange = (event) => {
   setNewFilter(event.target.value)
 }
 
+const removePerson = id => {
+  const person = persons.find(p => p.id === id)
+
+  if (window.confirm(`delete '${person.name}'`)) {
+  personService.removeID(person.id)
+  .then()
+  .catch(error => {
+    alert(`the person '${person.name}' was already deleted from server`)
+  }
+  )
+  setPersons(persons.filter(p => p.id !== id))
+
+  }
+
+}
 
   return (
     <div>
@@ -84,7 +117,11 @@ const handleFilterChange = (event) => {
       <h2>Numbers</h2>
       <ul>
         {persons.map(person => 
-        <Person key={person.name} person={person} filter={newFilter}/> 
+        <Person key={person.name} 
+        person={person} 
+        filter={newFilter}
+        remove = {() => removePerson(person.id)} 
+        /> 
           )}
       </ul>
     </div>

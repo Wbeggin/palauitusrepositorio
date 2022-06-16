@@ -1,10 +1,12 @@
 import Filter from './Filter'
 
-const Person = ({ person, filter}) => {
+const Person = ({ person, filter, remove}) => {
     console.log(person.number, filter)
      if (filter === '') {
          return(
-        <li>{person.name + ' ' + person.number}</li>
+        <li>{person.name + ' ' + person.number}
+            <button onClick={remove}>{'delete'}</button>
+        </li>
          )
         }
 
@@ -17,7 +19,9 @@ const Person = ({ person, filter}) => {
         }
     console.log('end of file' , person.number)
     return(
-        <li>{person.name + ' ' + person.number}</li>
+        <li>{person.name + ' ' + person.number}
+        <button onClick={remove}>{'delete'}</button>
+        </li>
          )
     
   }
