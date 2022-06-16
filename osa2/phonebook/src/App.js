@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Person from './components/Person'
-import Persons from './components/Persons'
 import axios from 'axios'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,34 +11,35 @@ const App = () => {
 
   useEffect(() => {   
     console.log('effect')    
-    axios.get('http://localhost:3001/persons')
-    .then(response => {console.log('promise fulfilled')
-    setPersons(response.data)
-    console.log(response.data)
-    })}, [])
-     console.log('render', persons.length, 'notes'  )
-
+    personService.getAll()
+    .then(initialpersons => {setPersons(initialpersons)}) 
+    }, [])
+    console.log(persons)
+   
 
   const addName = (event) => {
     event.preventDefault()
     console.log(persons)
-    let exists = false;
-    persons.map(person => 
-      {if(person.name === newName) {
-        alert(newName + ' ' + 'is already added to the phonebook')
-        exists = true;
-      }});
+    let isAdded = true
 
-      if (!exists){
+    persons.map(person => 
+      {person.name === newName ?
+        alert(newName + ' ' + 'is already added to the phonebook') 
+        : isAdded = false
+      })
+      
+      if (!isAdded) {
         const person = {
           name: newName,
-          pnumber: newNumber
+          number: newNumber
         }
-          setPersons(persons.concat(person))
-          setNewName('')
-          setNewNumber('')
+        personService.create(person)
+        .then(returnedPerson => {setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')  
+        })
       }
-    
+        
   }
 
   const handleNameChange = (event) => {   
