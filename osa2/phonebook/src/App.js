@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import Person from './components/Person'
-import axios from 'axios'
 import personService from './services/persons'
+import Popup from './components/popup'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [newPopUpText, setPopUpText] = useState('')
 
   useEffect(() => {   
     console.log('effect')    
@@ -22,7 +23,6 @@ const App = () => {
     console.log(persons)
     let isAdded = false
 
-
     persons.map(person => 
       {
         if (person.name === newName) {
@@ -31,6 +31,7 @@ const App = () => {
       })
 
       if (isAdded) {
+
         if (window.confirm(`${newName} is already added to the phonebook,  replace the old number with a new one?`))
         {
           const personId = persons.find(n => n.name === newName)
@@ -38,13 +39,24 @@ const App = () => {
             name: newName,
             number: newNumber
           }
-          personService.update(personId.id, person)
-          .then(returnedPerson => {setPersons(persons.map(person => 
-            person.id !== personId.id ? person : returnedPerson)
-            )
+         personService.update(personId.id, person)
+          .then(returnedPerson => {                
+            if (returnedPerson === 'fail') {
+              setPopUpText(`information of ${newName} has already been removed from server`)
+              setTimeout(() => { setPopUpText('')}, 5000)
+            }
+            else {
+              setPopUpText(`Number succesfully updated`)
+              setTimeout(() => { setPopUpText('')}, 5000)
+              setPersons(persons.map(person => 
+                person.id !== personId.id ? person : returnedPerson)
+                ) 
+            }
           setNewName('')
           setNewNumber('')   
-        })}
+        })
+  
+      }
       }
       
       if (!isAdded) {
@@ -54,6 +66,8 @@ const App = () => {
         }
         personService.create(person)
         .then(returnedPerson => {setPersons(persons.concat(returnedPerson))
+          setPopUpText(`added ${newName}`)
+          setTimeout(() => { setPopUpText('')}, 5000)
         setNewName('')
         setNewNumber('')  
         })
@@ -83,7 +97,8 @@ const removePerson = id => {
   }
   )
   setPersons(persons.filter(p => p.id !== id))
-
+  setPopUpText(`${person.name} succesfully deleted`)
+  setTimeout(() => { setPopUpText('')}, 5000)
   }
 
 }
@@ -91,6 +106,10 @@ const removePerson = id => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Popup
+      key={newPopUpText}
+      popupText = {newPopUpText}
+      />
       <form>
         <div>
           filter shown with <input value = {newFilter}

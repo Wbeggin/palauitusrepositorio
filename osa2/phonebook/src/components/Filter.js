@@ -1,5 +1,3 @@
-import App from "../App"
-
 const Filter = (person, filter) => {
     console.log(person, filter)
     const result = person.toUpperCase().includes(filter.toUpperCase())
