@@ -47,6 +47,18 @@ let notes = [
     response.end(response_text + "\n" + formattedDateTime)
   })
 
+  app.get('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)    
+    const note = notes.find(note => {
+      console.log(note.id, typeof note.id, id, typeof id, note.id === id)
+      return note.id === id
+    })
+    if(!note) {
+        response.status(404).end()
+    }
+    response.json(note)
+  })
+
 const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
