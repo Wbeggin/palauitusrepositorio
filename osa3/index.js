@@ -1,7 +1,9 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 app.use(express.json())
-
+morgan.token('data', (req, res) => JSON.stringify(req.body));
+app.use(morgan('tiny'));
 
 let notes = [
     {
@@ -50,7 +52,6 @@ let notes = [
   app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)    
     const note = notes.find(note => {
-      console.log(note.id, typeof note.id, id, typeof id, note.id === id)
       return note.id === id
     })
     if(!note) {
