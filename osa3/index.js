@@ -6,22 +6,22 @@ app.use(express.json())
 let notes = [
     {
       id: 1,
-      content: "Arto Hellas",
+      name: "Arto Hellas",
       number: "040-123456"
     },
     {
         id: 2,
-        content: "Ada Lovelace",
+        name: "Ada Lovelace",
         number: "39-44-5323523"
     },
     {
         id: 3,
-        content: "Dan Abramov",
+        name: "Dan Abramov",
         number: "12-43-234345"
     },
     {
         id: 4,
-        content: "Mary Poppendicl",
+        name: "Mary Poppendicl",
         number: "39-23-6423122"
     }
   ]
@@ -69,6 +69,24 @@ let notes = [
       response.status(204).end();
     }
   });
+
+  app.post('/api/persons', (request, response) => {
+    const { name, number } = request.body;
+
+    if (!name || !number) {
+      return response.status(400).json({ error: "name or number missing" });
+    }
+  
+    const newNote = {
+      id: Math.floor(Math.random() * 1000000) + 1,
+      name,
+      number,
+    };
+  
+    notes.push(newNote);
+    response.status(201).json(newNote);
+  });
+
 
 const PORT = 3001
 app.listen(PORT, () => {
