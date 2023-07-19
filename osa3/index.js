@@ -76,6 +76,9 @@ let notes = [
     if (!name || !number) {
       return response.status(400).json({ error: "name or number missing" });
     }
+    if (notes.some(note => note.name === name)) {
+      return response.status(409).json({ error: 'name must be unique' });
+    }
   
     const newNote = {
       id: Math.floor(Math.random() * 1000000) + 1,
