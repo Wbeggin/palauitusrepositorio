@@ -5,6 +5,8 @@ app.use(express.json())
 morgan.token('data', (req, res) => JSON.stringify(req.body));
 const cors = require('cors')
 app.use(express.static('build'))
+require('dotenv').config()
+const Person = require('./models/person')
 
 app.use(cors())
 app.use(morgan((tokens, req, res) => {
@@ -18,31 +20,13 @@ app.use(morgan((tokens, req, res) => {
     ].join(' ');
   }));
 
-let notes = [
-    {
-      id: 1,
-      name: "Arto Hellas",
-      number: "040-123456"
-    },
-    {
-        id: 2,
-        name: "Ada Lovelace",
-        number: "39-44-5323523"
-    },
-    {
-        id: 3,
-        name: "Dan Abramov",
-        number: "12-43-234345"
-    },
-    {
-        id: 4,
-        name: "Mary Poppendicl",
-        number: "39-23-6423122"
-    }
-  ]
+let notes = Person
 
   app.get('/api/persons', (request, response) => {
-    response.json(notes)
+    Person.find({}).then(result => {
+      console.log(result)
+    response.json(result)
+    })
   })
 
   app.get('/info', (request, response) => {
@@ -64,7 +48,7 @@ let notes = [
 
   app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)    
-    const note = notes.find(note => {
+    const note = notes.findById(note => {
       return note.id === id
     })
     if(!note) {
@@ -105,7 +89,7 @@ let notes = [
   });
 
 
-  const PORT = process.env.PORT || 3001
+  const PORT = process.env.PORT
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
   })

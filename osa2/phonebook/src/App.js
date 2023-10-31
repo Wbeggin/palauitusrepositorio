@@ -135,7 +135,8 @@ const removePerson = id => {
 
       <h2>Numbers</h2>
       <ul>
-        {persons.map(person => 
+        {
+        persons.map(person => 
         <Person key={person.name} 
         person={person} 
         filter={newFilter}
