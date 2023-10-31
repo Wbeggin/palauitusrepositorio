@@ -74,19 +74,19 @@ let notes = Person
     if (!name || !number) {
       return response.status(400).json({ error: "name or number missing" });
     }
-    if (notes.some(note => note.name === name)) {
-      return response.status(409).json({ error: 'name must be unique' });
-    }
-  
-    const newNote = {
-      id: Math.floor(Math.random() * 1000000) + 1,
+   // if (Person.some(note => note.name === name)) {
+     // return response.status(409).json({ error: 'name must be unique' });
+    //}
+    number.trim()
+    const newPerson = new Person({
       name,
       number,
-    };
-  
-    notes.push(newNote);
-    response.status(201).json(newNote);
-  });
+    })
+
+    newPerson.save().then(savedPerson => {
+      response.json(savedPerson)
+    })
+  })
 
 
   const PORT = process.env.PORT
