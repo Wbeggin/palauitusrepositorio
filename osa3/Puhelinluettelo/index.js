@@ -58,14 +58,15 @@ let notes = Person
   })
 
   app.delete('/api/persons/:id/', (request, response) => {
-    const id = Number(request.params.id);
-    const note = notes.find(note => note.id === id);
-    if (!note) {
-      response.status(404).end();
-    } else {
-      note.number = ''; 
-      response.status(204).end();
-    }
+    console.log(Person)
+    Person.findByIdAndDelete(request.params.id).then(result => {
+      console.log("RESULT")
+      console.log(result)
+      response.status(204).end()
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(404).end()})
   });
 
   app.post('/api/persons', (request, response) => {
