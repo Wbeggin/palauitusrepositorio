@@ -46,32 +46,22 @@ let notes = Person
     response.end(response_text + "\n" + formattedDateTime)
   })
 
-  app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)    
-    const note = notes.findById(note => {
-      return note.id === id
-    })
-    if(!note) {
-        response.status(404).end()
-    }
-    response.json(note)
+  app.get('/api/persons/:id', (request, response, next) => {
+    Person.findById(request.params.id)
+    .then(person => response.json(person))
+    .catch(error => next(error))
   })
 
-  app.delete('/api/persons/:id/', (request, response) => {
-    console.log(Person)
+  app.delete('/api/persons/:id/', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id).then(result => {
-      console.log("RESULT")
-      console.log(result)
       response.status(204).end()
     })
-    .catch(error => {
-      console.log(error)
-      response.status(404).end()})
+    .catch(error => next(error))
   });
 
-  app.post('/api/persons', (request, response) => {
-    const { name, number } = request.body;
-
+  app.post('/api/persons', (request, response, next) => {
+    try{
+    const { name, number } = request.body;    
     if (!name || !number) {
       return response.status(400).json({ error: "name or number missing" });
     }
@@ -87,8 +77,27 @@ let notes = Person
     newPerson.save().then(savedPerson => {
       response.json(savedPerson)
     })
+    }catch(error){
+      next(error) 
+    }
   })
 
+  const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+  }
+  app.use(unknownEndpoint)
+
+  const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+  
+    if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformatted id' })
+    }
+  
+    next(error)
+  }
+  
+  app.use(errorHandler)
 
   const PORT = process.env.PORT
   app.listen(PORT, () => {
