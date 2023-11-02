@@ -59,15 +59,27 @@ let notes = Person
     .catch(error => next(error))
   });
 
+  app.put('/api/persons/:id/', (request, response, next) => {
+    const { name, number } = request.body;    
+    Person.findOneAndUpdate(request.params.id).then(result => {
+      result.number = number
+      result.save()
+      response.json(result)
+    })
+    .catch(error =>{
+      next(error)
+    })
+  });
+
   app.post('/api/persons', (request, response, next) => {
     try{
     const { name, number } = request.body;    
     if (!name || !number) {
       return response.status(400).json({ error: "name or number missing" });
     }
-   // if (Person.some(note => note.name === name)) {
-     // return response.status(409).json({ error: 'name must be unique' });
-    //}
+   //if (Person.(note => note.name === name)) {
+   //   return response.status(409).json({ error: 'name must be unique' });
+   // }
     number.trim()
     const newPerson = new Person({
       name,
