@@ -21,7 +21,17 @@ const noteSchema = new mongoose.Schema({
     minlength: 5,   
     required: true  
     },
-  number: String,
+    number: {
+      type: String,
+      minlength : 8,
+      validate: {
+        validator: function(v) {
+          return /^(\d{2,3}-\d+)$/.test(v);
+        },
+        message: props => `${props.value} is not a valid number`
+      },
+      required: true
+    }
 })
 
 const Person = mongoose.model('Person', noteSchema)
