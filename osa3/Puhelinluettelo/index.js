@@ -20,7 +20,6 @@ app.use(morgan((tokens, req, res) => {
   ].join(' ')
 }))
 
-let notes = Person
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(result => {
@@ -41,8 +40,13 @@ app.get('/info', (request, response) => {
   }
 
   const formattedDateTime = currentDate.toLocaleString('en-US', options)
-  const response_text = `Phonebook has info for ${notes.length } people`
-  response.end(response_text + '\n' + formattedDateTime)
+  Person.countDocuments({}).then(count => {
+    console.log('Number of people in the collection:', count)
+    const response_text = `Phonebook has info for ${count} people`
+    response.end(response_text + '\n' + formattedDateTime)
+  }).catch(error => {
+    console.error('Error:', error)
+  })
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
