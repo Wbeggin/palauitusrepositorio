@@ -16,7 +16,11 @@ mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
 const noteSchema = new mongoose.Schema({
-  name: String,
+  name:{
+    type: String,
+    minlength: 5,   
+    required: true  
+    },
   number: String,
 })
 

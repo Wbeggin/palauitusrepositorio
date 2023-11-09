@@ -71,7 +71,6 @@ let notes = Person
   });
 
   app.post('/api/persons', (request, response, next) => {
-    try{
     const { name, number } = request.body;    
     if (!name || !number) {
       return response.status(400).json({ error: "name or number missing" });
@@ -87,10 +86,7 @@ let notes = Person
 
     newPerson.save().then(savedPerson => {
       response.json(savedPerson)
-    })
-    }catch(error){
-      next(error) 
-    }
+    }).catch(error => next(error))
   })
 
   const unknownEndpoint = (request, response) => {
@@ -104,7 +100,10 @@ let notes = Person
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
     }
-  
+     if (error.name === 'ValidationError') 
+    {    
+      return response.status(400).json({ error: error.message })
+    }
     next(error)
   }
   

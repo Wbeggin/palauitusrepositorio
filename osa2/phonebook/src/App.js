@@ -65,12 +65,12 @@ const App = () => {
           number: newNumber
         }
         personService.create(person)
-        .then(returnedPerson => {setPersons(persons.concat(returnedPerson))
+        .then(returnedPerson => {setPersons(persons.concat(returnedPerson))                 
           setPopUpText(`added ${newName}`)
           setTimeout(() => { setPopUpText('')}, 5000)
         setNewName('')
         setNewNumber('')  
-        })
+        }).catch(error => setPopUpText(error.response.data.error)) 
       }
   }
 
