@@ -11,7 +11,7 @@ describe('GET /api/blogs', () => {
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
-        expect(response.body).toHaveLength(10)
+        expect(response.body).toHaveLength(19)
     })
 
     test('blogs have an id field', async () => {
@@ -27,6 +27,31 @@ describe('GET /api/blogs', () => {
 })
 
 describe('POST /api/blogs', () => {
+    
+    test('blogs without title are not added', async () => {
+        const newBlog = {
+            author: 'Me Author',
+            url: 'http://www.example.com',
+            likes: 105
+        }
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+  
+    })
+
+    test('blogs without url are not added', async () => {
+        const newBlog = {
+            title: '1 Blog',
+            author: 'Me Author',
+            likes: 105
+        }
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+
+    })
+
     test('blogs can be added via HTTP POST request', async () => {
 
         const newBlog = {
@@ -62,9 +87,6 @@ describe('POST /api/blogs', () => {
             url: 'http://www.example.com'
         }
 
-        const initialBlogs = await api.get('/api/blogs')
-        const initialBlogCount = initialBlogs.body.length
-        console.log(newBlog)
         await api.post('/api/blogs')
             .send(newBlog)
             .expect(201)
@@ -74,7 +96,7 @@ describe('POST /api/blogs', () => {
         const addedBlog = response.body[response.body.length - 1]
         expect(addedBlog.likes).toBe(0)
         })
-})
+    })
 
 afterAll(async () => {
     await mongoose.connection.close()
