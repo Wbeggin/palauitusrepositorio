@@ -11,7 +11,7 @@ describe('GET /api/blogs', () => {
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
-        expect(response.body).toHaveLength(7)
+        expect(response.body).toHaveLength(10)
     })
 
     test('blogs have an id field', async () => {
@@ -24,36 +24,56 @@ describe('GET /api/blogs', () => {
         })
     })
 
+})
 
+describe('POST /api/blogs', () => {
+    test('blogs can be added via HTTP POST request', async () => {
 
-test('blogs can be added via HTTP POST request', async () => {
+        const newBlog = {
+            title: '2 Blog',
+            author: 'Me Author',
+            url: 'http://www.example.com',
+            likes: 105
+        }
 
-    const newBlog = {
-        title: '2 Blog',
-        author: 'Me Author',
-        url: 'http://www.example.com',
-        likes: 105
-    }
+        const initialBlogs = await api.get('/api/blogs')
+        const initialBlogCount = initialBlogs.body.length
+        console.log(newBlog)
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
 
-    const initialBlogs = await api.get('/api/blogs')
-    const initialBlogCount = initialBlogs.body.length
-    console.log(newBlog)
-    await api.post('/api/blogs')
-        .send(newBlog)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
+        const response = await api.get('/api/blogs')
+        const updatedBlogCount = response.body.length
 
-    const response = await api.get('/api/blogs')
-    const updatedBlogCount = response.body.length
+        expect(updatedBlogCount).toBe(initialBlogCount + 1)
 
-    expect(updatedBlogCount).toBe(initialBlogCount + 1)
+        const addedBlog = response.body[response.body.length - 1]
+        expect(addedBlog.author).toBe(newBlog.author)
+        expect(addedBlog.url).toBe(newBlog.url)
+        expect(addedBlog.likes).toBe(newBlog.likes)
+        })
 
-    const addedBlog = response.body[response.body.length - 1]
-    expect(addedBlog.author).toBe(newBlog.author)
-    expect(addedBlog.url).toBe(newBlog.url)
-    expect(addedBlog.likes).toBe(newBlog.likes)
-    })
+    test('likes default to 0 if not provided', async () => {
+        const newBlog = {
+            title: '3 Blog',
+            author: 'Me Author',
+            url: 'http://www.example.com'
+        }
 
+        const initialBlogs = await api.get('/api/blogs')
+        const initialBlogCount = initialBlogs.body.length
+        console.log(newBlog)
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+    
+        const response = await api.get('/api/blogs')    
+        const addedBlog = response.body[response.body.length - 1]
+        expect(addedBlog.likes).toBe(0)
+        })
 })
 
 afterAll(async () => {
