@@ -5,6 +5,25 @@ const app = require('../index');
 const Blog = require('../models/blog');
 const api = supertest(app)
 
+describe('Delete /api/blogs/:id', () => {
+test('deletes a blog', async () => {
+    const initialBlogs = await api.get('/api/blogs')
+    const blogsNumber = initialBlogs.body.length
+    const blogToDeleteId = initialBlogs.body[0].id
+    await api.delete(`/api/blogs/${blogToDeleteId}`)
+        .expect(204)
+
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(blogsNumber - 1)
+    })
+
+test('returns 404 if blog does not exist', async () => {
+    const blogToDeleteId = new mongoose.Types.ObjectId();
+    await api.delete(`/api/blogs/${blogToDeleteId}`)
+    .expect(404)
+})
+})
+
 describe('GET /api/blogs', () => {
     test('returns the correct number of blogs in JSON format', async () => {
         const response = await api.get('/api/blogs')
