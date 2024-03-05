@@ -5,23 +5,40 @@ const app = require('../index');
 const Blog = require('../models/blog');
 const api = supertest(app)
 
-describe('Delete /api/blogs/:id', () => {
-test('deletes a blog', async () => {
-    const initialBlogs = await api.get('/api/blogs')
-    const blogsNumber = initialBlogs.body.length
-    const blogToDeleteId = initialBlogs.body[0].id
-    await api.delete(`/api/blogs/${blogToDeleteId}`)
-        .expect(204)
-
-    const response = await api.get('/api/blogs')
-    expect(response.body).toHaveLength(blogsNumber - 1)
+describe('PUT /api/blogs/:id', () => {
+    test('updates a blog', async () => {
+        const initialBlogs = await api.get('/api/blogs')
+        const blogToUpdate = initialBlogs.body[0]
+        const updatedBlog = {
+            title: 'Updated Title', 
+            author: 'Updated Author',
+            url: 'http://www.example.com',
+            likes: 999
+        }
+        await api.put(`/api/blogs/${blogToUpdate.id}`)
+            .send(updatedBlog)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
     })
-
-test('returns 404 if blog does not exist', async () => {
-    const blogToDeleteId = new mongoose.Types.ObjectId();
-    await api.delete(`/api/blogs/${blogToDeleteId}`)
-    .expect(404)
 })
+
+describe('Delete /api/blogs/:id', () => {
+    test('deletes a blog', async () => {
+        const initialBlogs = await api.get('/api/blogs')
+        const blogsNumber = initialBlogs.body.length
+        const blogToDeleteId = initialBlogs.body[0].id
+        await api.delete(`/api/blogs/${blogToDeleteId}`)
+            .expect(204)
+
+        const response = await api.get('/api/blogs')
+        expect(response.body).toHaveLength(blogsNumber - 1)
+        })
+
+    test('returns 404 if blog does not exist', async () => {
+        const blogToDeleteId = new mongoose.Types.ObjectId();
+        await api.delete(`/api/blogs/${blogToDeleteId}`)
+        .expect(404)
+    })
 })
 
 describe('GET /api/blogs', () => {
