@@ -1,4 +1,4 @@
-const { test, describe } = require('node:test')
+const { test, describe } = require('@jest/globals')
 const assert = require('node:assert')
 const listHelper = require('../utils/list_helper')
 
