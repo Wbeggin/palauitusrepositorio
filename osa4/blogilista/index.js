@@ -7,6 +7,7 @@ app.use(express.json())
 const config = require('./utils/config')
 const blogsRouter = require('./controllers/blogs')
 app.use('/api/blogs', blogsRouter)
+app.use('/api/users', require('./controllers/users'))
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false)
 
