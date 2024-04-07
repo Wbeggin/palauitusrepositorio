@@ -10,7 +10,8 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', require('./controllers/users'))
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false)
-
+const loginRouter = require('./controllers/login')
+app.use('/api/login', loginRouter)
 
 const PORT = config.PORT
 const mongoUrl = config.MONGODB_URI
