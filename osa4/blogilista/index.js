@@ -1,6 +1,8 @@
 const http = require('http')
 const express = require('express')
 const app = express()
+const tokenExtractor = require('./middleware/tokenExtractor');
+app.use(tokenExtractor);
 const cors = require('cors')
 app.use(cors())
 app.use(express.json())
@@ -12,6 +14,7 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', false)
 const loginRouter = require('./controllers/login')
 app.use('/api/login', loginRouter)
+
 
 const PORT = config.PORT
 const mongoUrl = config.MONGODB_URI
