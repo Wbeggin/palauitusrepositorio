@@ -1,8 +1,10 @@
 const http = require('http')
 const express = require('express')
 const app = express()
-const tokenExtractor = require('./middleware/tokenExtractor');
-app.use(tokenExtractor);
+const tokenExtractor = require('./middleware/tokenExtractor')
+const userExtractor = require('./middleware/userExtractor')
+app.use(tokenExtractor)
+app.use(userExtractor)
 const cors = require('cors')
 app.use(cors())
 app.use(express.json())
