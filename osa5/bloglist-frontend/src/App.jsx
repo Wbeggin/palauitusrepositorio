@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -15,6 +16,7 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationType, setNotificationType] = useState('')
   const [notificationVisible, setNotificationVisible] = useState(true)
+  const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -108,47 +110,37 @@ const App = () => {
       setNewBlogAuthor('')
       setNewBlogUrl('')
       showSuccess(`a new blog ${newBlogTitle} by ${newBlogAuthor} added`)
+      setBlogFormVisible(false)
     } catch (exception) {
       console.log(exception.message)
       showError('Failed to add blog')
     }
   }
 
-  const blogForm = () => (
-    <form onSubmit={handleAddBlog}>
+  const blogForm = () => {
+    const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
+    const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
+    
+    return (
       <div>
-        title:
-        <input
-          type="text"
-          value={newBlogTitle}
-          name="title"
-          onChange={({ target }) => setNewBlogTitle(target.value)}
-        />
+        <div style={hideWhenVisible}>
+          <button onClick={() => setBlogFormVisible(true)}>new blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <BlogForm
+          newBlogTitle={newBlogTitle}
+          setNewBlogTitle={setNewBlogTitle}
+          newBlogAuthor={newBlogAuthor}
+          setNewBlogAuthor={setNewBlogAuthor}
+          newBlogUrl={newBlogUrl}
+          setNewBlogUrl={setNewBlogUrl}
+          handleAddBlog={handleAddBlog}
+          />
+        </div>
       </div>
+    )
+  }
 
-      <div>
-        author:
-        <input
-          type="text"
-          value={newBlogAuthor}
-          name="author"
-          onChange={({ target }) => setNewBlogAuthor(target.value)}
-        />
-      </div>
-
-      <div>
-        url:
-        <input
-          type="text"
-          value={newBlogUrl}
-          name="url"
-          onChange={({ target }) => setNewBlogUrl(target.value)}
-        />   
-      </div>
-
-      <button type="submit">create</button>
-    </form>
-  )
 
 
   return (
@@ -163,6 +155,7 @@ const App = () => {
           setUser(null)
           showSuccess('Logged out')          
         }}>logout</button>
+
 
         <h2>create new</h2>
         {blogForm()}
