@@ -10,9 +10,6 @@ const App = () => {
   const [username, setUsername] = useState('')   
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)    
-  const [newBlogTitle, setNewBlogTitle] = useState('')
-  const [newBlogAuthor, setNewBlogAuthor] = useState('')
-  const [newBlogUrl, setNewBlogUrl] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationType, setNotificationType] = useState('')
   const [notificationVisible, setNotificationVisible] = useState(true)
@@ -96,20 +93,11 @@ const App = () => {
     </form>      
   )
 
-  const handleAddBlog = async (event) => {
-    event.preventDefault()
+  const handleAddBlog = async (newBlog) => {
     try {
-      const newBlog = {
-        title: newBlogTitle,
-        author: newBlogAuthor,
-        url: newBlogUrl
-      }
       const returnedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(returnedBlog))
-      setNewBlogTitle('')
-      setNewBlogAuthor('')
-      setNewBlogUrl('')
-      showSuccess(`a new blog ${newBlogTitle} by ${newBlogAuthor} added`)
+      showSuccess(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setBlogFormVisible(false)
     } catch (exception) {
       console.log(exception.message)
@@ -127,14 +115,9 @@ const App = () => {
           <button onClick={() => setBlogFormVisible(true)}>new blog</button>
         </div>
         <div style={showWhenVisible}>
-          <BlogForm
-          newBlogTitle={newBlogTitle}
-          setNewBlogTitle={setNewBlogTitle}
-          newBlogAuthor={newBlogAuthor}
-          setNewBlogAuthor={setNewBlogAuthor}
-          newBlogUrl={newBlogUrl}
-          setNewBlogUrl={setNewBlogUrl}
-          handleAddBlog={handleAddBlog}
+        <h2>create new</h2>
+          <BlogForm createBlog={handleAddBlog}
+
           />
         </div>
       </div>
@@ -157,7 +140,6 @@ const App = () => {
         }}>logout</button>
 
 
-        <h2>create new</h2>
         {blogForm()}
 
          <h2>blogs</h2>
