@@ -124,7 +124,13 @@ const App = () => {
     )
   }
 
-
+  const handleLike = async (blog) => {
+    const updatedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id}
+    const backUpUser = blog.user
+    await blogService.updateBlog(updatedBlog)
+    updatedBlog.user = backUpUser
+    setBlogs(blogs.map(b => b.id === blog.id ? updatedBlog : b))
+  }
 
   return (
     <div>
@@ -144,7 +150,7 @@ const App = () => {
 
          <h2>blogs</h2>
          {blogs.map(blog =>
-           <Blog key={blog.id} blog={blog} />
+           <Blog key={blog.id} blog={blog} onLike={handleLike} />
          )}
         </div>
       } 
