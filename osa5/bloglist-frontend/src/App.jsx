@@ -96,6 +96,7 @@ const App = () => {
   const handleAddBlog = async (newBlog) => {
     try {
       const returnedBlog = await blogService.create(newBlog)
+      returnedBlog.user = user
       setBlogs(blogs.concat(returnedBlog))
       showSuccess(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setBlogFormVisible(false)
