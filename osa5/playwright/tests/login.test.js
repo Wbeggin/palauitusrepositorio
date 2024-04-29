@@ -66,6 +66,23 @@ describe('Blog app', () => {
       await expect(page.getByText('likes: 1')).toBeVisible()
     })
 
+    test('a blog can be deleted', async ({ page }) => {
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByRole('textbox').first().fill('test title')
+      await page.getByRole('textbox').nth(1).fill('test author')
+      await page.getByRole('textbox').last().fill('test url')
+      await page.getByRole('button', { name: 'create' }).click()
+      await page.getByRole('button', { name: 'view' }).click()
+
+      page.on('dialog', async dialog => {
+        await dialog.accept()
+      })
+      
+      await page.getByRole('button', { name: 'Delete' }).click()
+      await page.waitForSelector(`text="test title test author"`, { state: 'detached' })
+
+    })
+
   })
 
 })
