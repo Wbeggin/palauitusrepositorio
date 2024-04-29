@@ -17,6 +17,11 @@ mongoose.set('strictQuery', false)
 const loginRouter = require('./controllers/login')
 app.use('/api/login', loginRouter)
 
+if (process.env.NODE_ENV === 'test') {
+  console.log('test mode')
+  const testingRouter = require('./controllers/tests')
+  app.use('/api/testing', testingRouter)
+}
 
 const PORT = config.PORT
 const mongoUrl = config.MONGODB_URI

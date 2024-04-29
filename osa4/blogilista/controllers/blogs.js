@@ -18,11 +18,11 @@ blogsRouter.post('/', async (request, response) => {
     return response.status(401).json({ error: 'token invalid' })
   }
 
-  if (request.body.title === undefined || request.body.url === undefined) {
+  if (request.body.title === undefined || request.body.url === undefined || request.body.title === '' || request.body.url === '') {
     response.status(400).end()
     return;
   }
-  if (request.body.likes === undefined) {
+  if (request.body.likes === undefined || request.body.likes === null || request.body.likes === '') {
     request.body.likes = 0
   }
 
