@@ -11,6 +11,13 @@ describe('Blog app', () => {
         password: 'password'
       }
     })
+    await request.post('http://localhost:3001/api/users', {
+      data: {
+        name: 'tester',
+        username: 'tester',
+        password: 'password'
+      }
+    })
 
     await page.goto('http://localhost:5173')
   })
@@ -31,7 +38,7 @@ describe('Blog app', () => {
     })
 
       test('fails with wrong credentials', async ({ page }) => {
-        await page.getByRole('textbox').first().fill('tester')
+        await page.getByRole('textbox').first().fill('testeeer')
         await page.getByRole('textbox').last().fill('password')
         await page.getByRole('button', { name: 'login' }).click()
         await expect(page.getByText('Wrong credentials')).toBeVisible()
@@ -82,6 +89,25 @@ describe('Blog app', () => {
       await page.waitForSelector(`text="test title test author"`, { state: 'detached' })
 
     })
+
+    test('only the user who created a blog can see delete button', async ({ page }) => {
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByRole('textbox').first().fill('test title')
+      await page.getByRole('textbox').nth(1).fill('test author')
+      await page.getByRole('textbox').last().fill('test url')
+      await page.getByRole('button', { name: 'create' }).click()
+      await page.getByRole('button', { name: 'logout' }).click()
+
+      await page.getByRole('textbox').first().fill('tester')
+      await page.getByRole('textbox').last().fill('password')
+      await page.getByRole('button', { name: 'login' }).click()
+
+      await page.getByRole('button', { name: 'view' }).click()
+      
+      const isVisible = await page.getByRole('button', { name: 'Delete' }).isVisible()
+      await expect(isVisible).toBe(false)
+    })
+
 
   })
 
