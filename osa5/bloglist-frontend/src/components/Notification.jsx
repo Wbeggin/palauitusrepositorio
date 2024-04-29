@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 
 const Notification = ({ message, type, visible }) => {
-    if (message === null || message === '') {
-        return null
-    }
+  if (message === null || message === '') {
+    return null
+  }
 
   const notificationStyle = {
     color: type === 'error' ? 'red' : 'green',
@@ -17,8 +17,8 @@ const Notification = ({ message, type, visible }) => {
 
   return (
     <div style={visible ? notificationStyle : { display: 'none' }}>
-    {message}
-</div>
+      {message}
+    </div>
   )
 }
 

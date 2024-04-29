@@ -7,9 +7,9 @@ import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')   
-  const [password, setPassword] = useState('') 
-  const [user, setUser] = useState(null)    
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [notificationType, setNotificationType] = useState('')
   const [notificationVisible, setNotificationVisible] = useState(true)
@@ -18,17 +18,17 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {      
-      const user = JSON.parse(loggedUserJSON)      
-      setUser(user)      
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
     }
-    }, [])
-  
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -73,7 +73,7 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -82,7 +82,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -90,7 +90,7 @@ const App = () => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   )
 
   const handleAddBlog = async (newBlog) => {
@@ -108,14 +108,14 @@ const App = () => {
   const blogForm = () => {
     const hideWhenVisible = { display: blogFormVisible ? 'none' : '' }
     const showWhenVisible = { display: blogFormVisible ? '' : 'none' }
-    
+
     return (
       <div>
         <div style={hideWhenVisible}>
           <button onClick={() => setBlogFormVisible(true)}>new blog</button>
         </div>
         <div style={showWhenVisible}>
-        <h2>create new</h2>
+          <h2>create new</h2>
           <BlogForm createBlog={handleAddBlog}
 
           />
@@ -125,7 +125,7 @@ const App = () => {
   }
 
   const handleLike = async (blog) => {
-    const updatedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id}
+    const updatedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id }
     const backUpUser = blog.user
     await blogService.updateBlog(updatedBlog)
     updatedBlog.user = backUpUser
@@ -145,23 +145,23 @@ const App = () => {
       <Notification message={notificationMessage} type={notificationType} visible={notificationVisible} />
       {!user && loginForm()}
       {user && <div>
-         <p>{user.name} logged in</p>
+        <p>{user.name} logged in</p>
 
         <button onClick={() => {
           window.localStorage.removeItem('loggedBlogappUser')
           setUser(null)
-          showSuccess('Logged out')          
+          showSuccess('Logged out')
         }}>logout</button>
 
 
         {blogForm()}
 
-         <h2>blogs</h2>
-         {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
-           <Blog key={blog.id} blog={blog} onLike={handleLike} loggedUser={user} onDelete={handleDelete} />
-         )}
-        </div>
-      } 
+        <h2>blogs</h2>
+        {blogs.sort((first, second) => second.likes - first.likes).map(blog =>
+          <Blog key={blog.id} blog={blog} onLike={handleLike} loggedUser={user} onDelete={handleDelete} />
+        )}
+      </div>
+      }
     </div>
   )
 }
